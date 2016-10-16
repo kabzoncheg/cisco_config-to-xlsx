@@ -153,8 +153,6 @@ def main():
     args = get_args()
     path_to_folder = args.show
     path_to_xls_file = args.xls
-    # path_to_folder = os.getcwd()
-    # path_to_xls_file = os.path.join(path_to_folder, 'xlsx_test_document.xlsx')
 
     txt_files_paths = [os.path.join(path_to_folder, file)
                        for file in os.listdir(path_to_folder)
