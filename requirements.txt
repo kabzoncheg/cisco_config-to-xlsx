@@ -1,0 +1,2 @@
+ciscoconfparse>=1.2.40
+openpyxl>=2.4.0
