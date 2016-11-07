@@ -94,7 +94,6 @@ def show_cmd_parser(path_to_file):
             regex_for_match = interface + r' is ((up)|(administratively down)|(down)), line protocol is ((up)|(down))'
             if re.match(regex_for_match, element):
                 if re.match('^.+ line protocol is up', element):
-                    print('UP!!!!')
                     parsed_values['interfaces'][interface]['int_status'] = 'UP'
                     break
                 if re.match('^.+ line protocol is down', element):
