@@ -15,7 +15,8 @@ def get_args():
                                                  'Script for parsing .txt files populated with various "show" commands'
                                                  'output from Cisco network devices and populating .xls document'
                                                  'with required information: IP-addresses, S/N, software version, etc.')
-    parser.add_argument('-X', '--xls', type=str, help='Path to .xls document', required=True)
+    parser.add_argument('-X', '--xls', type=str, help='Path to .xls document',
+                        default=os.path.join(os.getcwd(), 'xls_template.xlsx'))
     parser.add_argument('-S', '--show', type=str, help='Path to folder with .txt files', default=os.getcwd())
 
     args = parser.parse_args()
@@ -90,9 +91,10 @@ def show_cmd_parser(path_to_file):
     # This cycles get up/down information form 'show interfaces' output
     for interface in parsed_values['interfaces']:
         for element in dict_for_ciscoconfparser:
-            regex_for_match = interface + r' is (up)|(down), line protocol is (up)|(down)'
+            regex_for_match = interface + r' is ((up)|(administratively down)|(down)), line protocol is ((up)|(down))'
             if re.match(regex_for_match, element):
                 if re.match('^.+ line protocol is up', element):
+                    print('UP!!!!')
                     parsed_values['interfaces'][interface]['int_status'] = 'UP'
                     break
                 if re.match('^.+ line protocol is down', element):
@@ -100,7 +102,6 @@ def show_cmd_parser(path_to_file):
                     break
             else:
                 parsed_values['interfaces'][interface]['int_status'] = 'NOT CONFIGURED'
-
     return parsed_values
 
 
