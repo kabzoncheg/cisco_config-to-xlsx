@@ -79,6 +79,13 @@ def show_cmd_parser(path_to_file):
                 dict_values = line.split()
                 parsed_values['arp_table'].append(dict(zip(dict_keys, dict_values)))
 
+    if parsed_values['arp_table']:
+        all_int = []
+        for entry in parsed_values['arp_table']:
+            all_int.append(entry['port'])
+        uniq_int = set(all_int)
+        parsed_values['mac_on_int_count'] = dict((entry, all_int.count(entry)) for entry in uniq_int)
+
     parse = CiscoConfParse(dict_for_ciscoconfparser, factory=True)
     interface_object_list = parse.find_objects('^interface\s')
     parsed_values['interfaces'] = {}
@@ -190,6 +197,12 @@ def xlsx_writer(dict_list, xlsx_file):
                 sheet.cell(row=current_offset, column=15).value = entry['port']
                 sheet.cell(row=current_offset, column=16).value = mac_to_vendor(entry['mac'])
                 current_offset += 1
+            current_offset = sheet_offset
+
+            for entry in cmd_dict['mac_on_int_count']:
+                sheet.cell(row=sheet_offset, column=17).value = entry
+                sheet.cell(row=sheet_offset, column=18).value = cmd_dict['mac_on_int_count'][entry]
+                sheet_offset += 1
 
     wb.save(xlsx_file)
 
