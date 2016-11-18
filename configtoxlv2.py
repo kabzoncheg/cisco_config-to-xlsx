@@ -128,7 +128,12 @@ def mac_to_vendor(mac_addr):
     """
     url = 'http://macvendors.co/api/%s'
     req = requests.get(url % mac_addr)
-    return req.json()['result']['company']
+    try:
+        result = req.json()['result']['company']
+    except KeyError:
+        result = 'UNKNOWN'
+    return result
+
 
 
 def xlsx_writer(dict_list, xlsx_file):
